@@ -19,6 +19,7 @@ public class Cookies {
         JSONObject jsonObject = new JSONObject();
         for (Cookie c : driver.manage().getCookies()) {
             jsonObject.put(c.getName(), c.getValue());
+            System.out.println(jsonObject);
         }
         FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/src/test/resources/cookies.json");
         writer.write(jsonObject.toJSONString());

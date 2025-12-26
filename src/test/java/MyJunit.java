@@ -17,19 +17,28 @@ import java.util.Set;
 public class MyJunit {
     WebDriver driver;
     @BeforeAll
-    public void setup() throws IOException, ParseException {
+    public void setup() throws IOException, ParseException, InterruptedException {
         driver=new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         driver.get("http://localhost:3000");
         Cookies utils=new Cookies(driver);
         utils.setCookie();
+
     }
     @AfterAll
     public void closeBrowser(){
         driver.quit();
     }
 
+    @Test
+    @Order(0)
+    @DisplayName("Get title")
+    public void getTitle(){
+        String titleActual=driver.getTitle();
+        String titleExpected="Practice Site";
+        Assertions.assertTrue(titleActual.contains(titleExpected),"Title mismatched");
+    }
     @Test
     @Order(1)
     @DisplayName("User login")
