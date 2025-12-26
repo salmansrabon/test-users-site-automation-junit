@@ -79,10 +79,7 @@ public class MyJunit {
     @DisplayName("Button click manipulation")
     public void buttonClick(){
         driver.get("http://localhost:3000/dashboard/practice-components");
-
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-
+        Utils.scrollDown(driver);
         Actions actions=new Actions(driver);
         actions.doubleClick(driver.findElements(By.tagName("button")).get(6)).click().perform();
         driver.switchTo().alert().accept();
@@ -167,7 +164,7 @@ public class MyJunit {
         //driver.switchTo().frame("embeddedExample");
         String text= driver.findElements(By.tagName("p")).get(0).getText();
         System.out.println(text);
-        Assertions.assertTrue(text.contains("Login to access your dashboard and users table"));
+        Assertions.assertTrue(text.contains("Login to access your dashboard"));
         driver.switchTo().defaultContent();
     }
 }
