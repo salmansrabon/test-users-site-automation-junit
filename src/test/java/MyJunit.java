@@ -2,6 +2,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -18,8 +19,12 @@ public class MyJunit {
     WebDriver driver;
     @BeforeAll
     public void setup() throws IOException, ParseException, InterruptedException {
-        driver=new ChromeDriver();
+        ChromeOptions chromeOptions=new ChromeOptions();
+        chromeOptions.addArguments("--headed");
+
+        driver=new ChromeDriver(chromeOptions);
         driver.manage().window().maximize();
+
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         driver.get("http://localhost:3000");
         Cookies utils=new Cookies(driver);
@@ -94,8 +99,6 @@ public class MyJunit {
         driver.switchTo().alert().accept();
         actions.contextClick(driver.findElements(By.tagName("button")).get(7)).click().perform();
         driver.switchTo().alert().accept();
-        actions.moveToElement(driver.findElements(By.tagName("button")).get(7)).sendKeys(Keys.ENTER).perform();
-        driver.switchTo().alert().accept();
     }
     @Test
     @Order(5)
@@ -112,13 +115,22 @@ public class MyJunit {
     @Test
     @Order(6)
     @DisplayName("ReactJS readonly date manipulation")
-    public void reactDateTime(){
+    public void reactDateTimeReadonly(){
         driver.get("http://localhost:3000/dashboard/practice-components");
         WebElement dateInput= driver.findElements(By.className("form-control")).get(1);
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].removeAttribute('readonly')", dateInput);
         // Set date value
         js.executeScript("arguments[0].value='11/24/2025'", dateInput);
+    }
+    @Test
+    @Order(6)
+    @DisplayName("ReactJS editable date manipulation")
+    public void reactDateTimeEditable(){
+        driver.get("http://localhost:3000/dashboard/practice-components");
+        WebElement datePicker=driver.findElement(By.cssSelector("[placeholder=\"Select date\"]"));
+        datePicker.sendKeys(Keys.CONTROL+"a",Keys.BACK_SPACE);
+        datePicker.sendKeys("05/10/1995", Keys.ENTER);
     }
     @Test
     @Order(7)
